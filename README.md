@@ -50,16 +50,4 @@ The directory structure of your new project looks like this:
     └── {{cookiecutter.package_name}}                             -> main package
 ```
 
-### Launching Docker Container
-------------
-```
-docker-compose build
-docker-compose up -d
-```
 
-### Launching Docker Container for GPU
-------------
-```
-docker-compose build
-docker run --network host --gpus all -it -v pwd:/srv/src/ -p 8888:8888
-```
