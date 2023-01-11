@@ -1,0 +1,57 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/python-3
+{
+	"name": "{{cookiecutter.repo_name}}",
+	"initializeCommand": "make core-build",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "devcontainer${localEnv:DEVCONTAINER_DEFAULT_DEVICE}",
+	"runServices": [
+		"devcontainer${localEnv:DEVCONTAINER_DEFAULT_DEVICE}"
+	],
+	"workspaceFolder": "/workspace",
+	"settings": {
+		"python.pythonPath": "/bin/python",
+		"python.languageServer": "Pylance",
+		"editor.formatOnSave": true,
+		"python.formatting.provider": "black",
+		"python.formatting.blackPath": "/usr/local/bin/black",
+		"python.formatting.blackArgs": [
+			"--line-length=88"
+		],
+		"python.linting.enabled": true,
+		"python.linting.flake8Enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.linting.pycodestyleEnabled": false,
+		"python.linting.flake8Path": "/usr/local/bin/flake8",
+		"python.linting.pylintPath": "/usr/local/bin/pylint",
+		"python.linting.pylintArgs": [
+			"--generate-members"
+		],
+		"[python]": {
+			"editor.codeActionsOnSave": {
+				"source.organizeImports": true
+			}
+		},
+		"files.trimFinalNewlines": true,
+		"files.trimTrailingWhitespace": true,
+		"files.watcherExclude": {
+			"**/.git/objects/**": true,
+			"**/.git/subtree-cache/**": true,
+		}
+	},
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"eamodio.gitlens",
+		"njpwerner.autodocstring",
+		"christian-kohler.path-intellisense",
+		"magicstack.magicpython",
+		"ms-toolsai.jupyter-renderers",
+		"VisualStudioExptTeam.vscodeintellicode"
+	],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "bash /home/vscode/entrypoint.sh",
+}

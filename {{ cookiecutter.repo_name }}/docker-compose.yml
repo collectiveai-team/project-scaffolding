@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+    {{cookiecutter.repo_name}}-core:
+        image: ${CORE_IMAGE}
+        container_name: {{cookiecutter.repo_name}}-core
+        build:
+            context: .
+            dockerfile: ./build/core/Dockerfile
+            args:
+                - PYTHON_VERSION=${PYTHON_VERSION}
+                - PIP_VERSION=${PIP_VERSION}
+                {% if cookiecutter.pytorch_version != "no" -%}  
+                - PYTORCH_VERSION=${PYTORCH_VERSION}
+                {% endif -%}
+                {% if cookiecutter.use_cuda == "yes" -%}
+                - CUDA_VERSION=${CUDA_VERSION}
+                {% endif %}
+
+    {{cookiecutter.repo_name}}-jupyter:
+        image: ${JUPYTER_IMAGE}
+        container_name: {{cookiecutter.repo_name}}-jupyter
+        build:
+            context: .
+            dockerfile: ./build/jupyter/Dockerfile
+            args:
+                - CORE_IMAGE=${CORE_IMAGE}
+
+    {{cookiecutter.repo_name}}-jupyter-gpu:
+        network_mode: host
+        image: ${JUPYTER_IMAGE}
+        container_name: {{cookiecutter.repo_name}}-jupyter-gpu
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities: [ gpu ]
+        shm_size: '8gb'
+        volumes:
+            - $PWD/${SRC_VOLUME_MOUNT}
+            - $PWD/${NOTEBOOKS_VOLUME_MOUNT}
+            - $PWD/${RESOURCES_VOLUME_MOUNT}
+        env_file:
+            - .env
+
+    {{cookiecutter.repo_name}}-jupyter-cpu:
+        network_mode: host
+        image: ${JUPYTER_IMAGE}
+        container_name: {{cookiecutter.repo_name}}-jupyter-cpu
+        shm_size: '8gb'
+        volumes:
+            - $PWD/${SRC_VOLUME_MOUNT}
+            - $PWD/${NOTEBOOKS_VOLUME_MOUNT}
+            - $PWD/${RESOURCES_VOLUME_MOUNT}
+        env_file:
+            - .env
+
+    {{cookiecutter.repo_name}}-vastai:
+        image: ${VASTAI_IMAGE}
+        build:
+            context: .
+            dockerfile: ./build/vastai/Dockerfile
+            args:
+                - JUPYTER_IMAGE=${JUPYTER_IMAGE}

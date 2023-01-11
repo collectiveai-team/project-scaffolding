@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+    devcontainer-gpu:
+        network_mode: host
+        image: {{cookiecutter.repo_name}}-devcontainer
+        container_name: {{cookiecutter.repo_name}}-devcontainer-gpu
+        build:
+            context: ..
+            dockerfile: .devcontainer/Dockerfile
+            args:
+                - USER_NAME=vscode
+                - USER_UID=1000
+                - USER_GID=1000
+        env_file: ../common.env
+        devices:
+            - /dev/nvidia0:/dev/nvidia0
+            - /dev/nvidiactl:/dev/nvidiactl
+            - /dev/nvidia-modeset:/dev/nvidia-modeset
+            - /dev/nvidia-uvm:/dev/nvidia-uvm
+            - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tool
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities: [ gpu ]
+        shm_size: "8gb"
+        volumes:
+            - ..:/workspace:cached
+            - ../notebooks/:/notebooks
+            - ../resources/:/resources
+            - $HOME/.ssh/:/home/vscode/.ssh
+            - $HOME/.gitconfig:/home/vscode/.gitconfig
+        command: /bin/sh -c "while sleep 1000; do :; done"
+
+    devcontainer:
+        network_mode: host
+        image: {{cookiecutter.repo_name}}-devcontainer
+        container_name: {{cookiecutter.repo_name}}-devcontainer-cpu
+        build:
+            context: ..
+            dockerfile: .devcontainer/Dockerfile
+            args:
+                - USER_NAME=vscode
+                - USER_UID=1000
+                - USER_GID=1000
+        env_file: ../common.env
+        shm_size: "8gb"
+        volumes:
+            - ..:/workspace:cached
+            - ../notebooks/:/notebooks
+            - ../resources/:/resources
+            - $HOME/.ssh/:/home/vscode/.ssh
+            - $HOME/.gitconfig:/home/vscode/.gitconfig
+        command: /bin/sh -c "while sleep 1000; do :; done"
