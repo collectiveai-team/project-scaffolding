@@ -58,3 +58,13 @@ RUN --mount=type=cache,target=/root/.cache,id=pip \
 USER $USER_NAME
 WORKDIR /tmp
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# create links to the project but delete them to be mounted by the devcontainer
+USER root
+COPY src /workspace/src
+RUN --mount=type=cache,target=/root/.cache,id=pip \
+    pip install -r /workspace/api/requirements.txt
+
+RUN pip install --no-deps -e /workspace/api  \
+    && rm -rf /workspace/api
+USER $USER_NAME
