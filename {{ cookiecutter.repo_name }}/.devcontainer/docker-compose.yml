@@ -11,7 +11,7 @@ services:
                 - USER_NAME=vscode
                 - USER_UID=1000
                 - USER_GID=1000
-        env_file: ../common.env
+        env_file: ../.env
 
         deploy:
             resources:
@@ -38,7 +38,7 @@ services:
                 - USER_NAME=vscode
                 - USER_UID=1000
                 - USER_GID=1000
-        env_file: ../common.env
+        env_file: ../.env
         shm_size: "8gb"
         volumes:
             - ..:/workspace:cached

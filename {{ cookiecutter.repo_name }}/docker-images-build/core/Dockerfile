@@ -7,14 +7,15 @@ FROM ubuntu:20.04
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG PYTHON_VERSION
-ARG PIP_VERSION
-{% if cookiecutter.pytorch_version != "no" %}    
-ARG PYTORCH_VERSION
+ARG PYTHON_VERSION=python{{ cookiecutter.python_version}}
+ARG PIP_VERSION=23.3.2
+
+{% if cookiecutter.pytorch_version != "no" -%}  
+ARG PYTORCH_VERSION={{ cookiecutter.pytorch_version }}
 {% endif -%}
-{% if cookiecutter.use_cuda == "yes" %}
-ARG CUDA_VERSION
-{% endif -%}
+{% if cookiecutter.use_cuda == "yes" -%}
+ARG CUDA_VERSION={{ cookiecutter._pythorch_cuda_version_map.get(cookiecutter.pytorch_version, '') }}
+{% endif %}
 
 # OS packages
 RUN sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list \
@@ -48,14 +49,14 @@ RUN apt-get install -y --no-install-recommends \
 RUN update-alternatives --install /usr/bin/python python /usr/bin/${PYTHON_VERSION} 1 \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/${PYTHON_VERSION} 1
 
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
+  cd /usr/local/bin && \
+  ln -s /opt/poetry/bin/poetry && \
+  poetry config virtualenvs.create false
+
 
 WORKDIR /tmp
-
-# Install pip
-RUN wget https://github.com/pypa/pip/archive/refs/tags/${PIP_VERSION}.zip --no-check-certificate \
-    && unzip ${PIP_VERSION}.zip \
-    && cd pip-${PIP_VERSION} \
-    && python setup.py install 
 
 # Install pytorch
 {% if cookiecutter.pytorch_version != "no" -%}
@@ -70,11 +71,11 @@ RUN --mount=type=cache,target=/root/.cache \
 {% endif %}
 
 # Install {{cookiecutter.package_name}} 
-COPY ./src/{{cookiecutter.package_name}}  /tmp/{{cookiecutter.package_name}} 
+COPY ./{{cookiecutter.package_name}}  /tmp/{{cookiecutter.package_name}} 
+COPY ./pyproject.toml /tmp/pyproject.toml
 
 RUN --mount=type=cache,target=/root/.cache \
-    pip install --no-deps ./{{cookiecutter.package_name}} 
-
+    poetry lock && poetry install --no-dev
 # Clean
 RUN rm -rf /tmp/*
 

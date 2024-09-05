@@ -5,6 +5,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Exclude the environment file
+.env*
+
 # Distribution / packaging
 .Python
 env/
