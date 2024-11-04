@@ -1,7 +1,7 @@
 {% if cookiecutter.use_cuda == "yes" %} 
 FROM  {{cookiecutter.base_image}}
 {% else -%}
-FROM ubuntu:20.04
+FROM python:cookiecutter.python_version
 {% endif -%}
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -15,7 +15,6 @@ ARG PYTORCH_VERSION={{ cookiecutter.pytorch_version }}
 {% endif -%}
 {% if cookiecutter.use_cuda == "yes" -%}
 ARG CUDA_VERSION={{ cookiecutter._pythorch_cuda_version_map.get(cookiecutter.pytorch_version, '') }}
-{% endif %}
 
 # OS packages
 RUN sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list \
@@ -24,6 +23,7 @@ RUN sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list \
 RUN apt-get install -y --no-install-recommends \
     software-properties-common \
     && add-apt-repository ppa:deadsnakes/ppa
+{% endif %}
 
 # OS packages
 RUN apt-get update --fix-missing; exit 0
@@ -38,16 +38,21 @@ RUN apt-get install -y --no-install-recommends \
     parallel \
     gcc \
     python3-setuptools \
+{% if cookiecutter.use_cuda == "yes" -%}
     ${PYTHON_VERSION} \
     ${PYTHON_VERSION}-dev \
     ${PYTHON_VERSION}-distutils \
+{% endif %}
     && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/tmp/* /var/lib/apt/lists/*
 
+
+{% if cookiecutter.use_cuda == "yes" -%}
 # Set default python version
 RUN update-alternatives --install /usr/bin/python python /usr/bin/${PYTHON_VERSION} 1 \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/${PYTHON_VERSION} 1
+{% endif %}
 
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \

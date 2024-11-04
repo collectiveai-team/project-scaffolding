@@ -4,4 +4,4 @@ export $(shell sed 's/=.*//' .env)
 
 
 core-build:
-	docker-compose build {{cookiecutter.repo_name}}-core
+	docker compose build {{cookiecutter.repo_name}}-core
