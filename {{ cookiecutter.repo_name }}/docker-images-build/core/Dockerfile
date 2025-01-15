@@ -1,7 +1,7 @@
 {% if cookiecutter.use_cuda == "yes" %} 
 FROM  {{cookiecutter.base_image}}
 {% else -%}
-FROM python:cookiecutter.python_version
+FROM python:{{cookiecutter.python_version}}
 {% endif -%}
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
