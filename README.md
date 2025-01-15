@@ -9,19 +9,6 @@ A scaffolding data science project generator following _Collective AI_ standards
  - [Cookiecutter Python package](http://cookiecutter.readthedocs.org/en/latest/installation.html) >= 1.4.0: This can be installed with pip or conda depending on how you manage your Python packages:
 
 ``` bash
-$ pip3 install cookiecutter
-```
-
-or
-
-``` bash
-$ conda config --add channels conda-forge
-$ conda install cookiecutter
-```
-
-or
-
-``` bash
 $ sudo apt install pipx
 $ pipx install cookiecutter
 ```
@@ -30,7 +17,7 @@ $ pipx install cookiecutter
 ### To start a new project, run:
 ------------
 
-    cookiecutter git@github.com:collectiveai-team/project-scaffolding.git
+    pipx run cookiecutter git@github.com:collectiveai-team/project-scaffolding.git
 
 
 
