@@ -55,7 +55,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/${PYTHON_VERSI
 {% endif %}
 
 # Install Poetry
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python - --version 1.8.4 && \
   cd /usr/local/bin && \
   ln -s /opt/poetry/bin/poetry && \
   poetry config virtualenvs.create false
