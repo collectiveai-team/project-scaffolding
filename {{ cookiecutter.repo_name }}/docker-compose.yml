@@ -1,9 +1,0 @@
-version: '3.8'
-services:
-    {{cookiecutter.repo_name}}-core:
-        image: {{cookiecutter.repo_name}}-core:latest
-        container_name: {{cookiecutter.repo_name}}-core
-        build:
-            context: .
-            dockerfile: ./docker-images-build/core/Dockerfile
-

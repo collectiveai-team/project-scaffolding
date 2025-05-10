@@ -1,49 +1,33 @@
-version: "3.8"
+x-template: &template
+    build:
+        context: ..
+        dockerfile: .devcontainer/Dockerfile
+    network_mode: host
+    shm_size: "8gb"
+    volumes:
+        - ..:/workspace:cached
+        - ../resources:/resources:cached
+        - $HOME/.ssh/:/home/ubuntu/.ssh
+        - /var/run/docker.sock:/var/run/docker.sock
+        - mlflow-data:/workspace/mlruns
+    command: /bin/sh -c "while true; do :; done"
+    env_file:
+        - ../.devcontainer/.env
+
 services:
     devcontainer-gpu:
-        network_mode: host
-        image: {{cookiecutter.repo_name}}-devcontainer
-        container_name: {{cookiecutter.repo_name}}-devcontainer-gpu
-        build:
-            context: ..
-            dockerfile: .devcontainer/Dockerfile
-            args:
-                - USER_NAME=vscode
-                - USER_UID=1000
-                - USER_GID=1000
-        env_file: ../.env
-
+        <<: *template
+        container_name: {{cookiecutter.repo_name}}-devcontainer-cpu
         deploy:
             resources:
                 reservations:
-                    devices:
-                        - capabilities: [ gpu ]
-        shm_size: "8gb"
-        volumes:
-            - ..:/workspace:cached
-            - ../notebooks/:/notebooks
-            - ../resources/:/resources
-            - $HOME/.ssh/:/home/vscode/.ssh
-            - $HOME/.gitconfig:/home/vscode/.gitconfig
-        command: /bin/sh -c "while sleep 1000; do :; done"
+                devices:
+                    - capabilities: [ gpu ]
 
     devcontainer:
-        network_mode: host
-        image: {{cookiecutter.repo_name}}-devcontainer
-        container_name: {{cookiecutter.repo_name}}-devcontainer-cpu
-        build:
-            context: ..
-            dockerfile: .devcontainer/Dockerfile
-            args:
-                - USER_NAME=vscode
-                - USER_UID=1000
-                - USER_GID=1000
-        env_file: ../.env
-        shm_size: "8gb"
-        volumes:
-            - ..:/workspace:cached
-            - ../notebooks/:/notebooks
-            - ../resources/:/resources
-            - $HOME/.ssh/:/home/vscode/.ssh
-            - $HOME/.gitconfig:/home/vscode/.gitconfig
-        command: /bin/sh -c "while sleep 1000; do :; done"
+        <<: *template
+        container_name: {{cookiecutter.repo_name}}-devcontainer-gpu
+
+volumes:
+    mlflow-data:
+        name: mlflow-data

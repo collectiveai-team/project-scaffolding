@@ -5,9 +5,6 @@ __pycache__/
 # C extensions
 *.so
 
-# Exclude the environment file
-.env*
-
 # Distribution / packaging
 .Python
 env/
@@ -66,8 +63,6 @@ target/
 # Pycharm
 .idea
 
-# VS Code
-.vscode/
 
 # IntelliJ
 *.iml
@@ -92,3 +87,5 @@ workspace.xml
 
 # Mypy cache
 .mypy_cache/
+
+.env*

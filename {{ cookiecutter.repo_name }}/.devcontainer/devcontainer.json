@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/python-3
 {
 	"name": "{{cookiecutter.repo_name}}",
-	"initializeCommand": "make core-build",
+	// "initializeCommand": "make core-build",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "devcontainer",
 	"runServices": [
@@ -12,50 +12,25 @@
 	"customizations": {
 		"vscode": {
 			"settings": {
-				"python.languageServer": "Pylance",
-				"editor.formatOnSave": true,
-				"python.formatting.provider": "none",
-				"python.formatting.blackArgs": [
-					"--line-length=88"
-				],
-				"python.linting.enabled": true,
-				"python.linting.flake8Path": "/usr/local/bin/flake8",
-				"python.linting.pylintArgs": [
-					"--generate-members"
-				],
-				"[python]": {
-					"editor.defaultFormatter": "ms-python.black-formatter",
-					"editor.formatOnSave": true,
-					"editor.codeActionsOnSave": {
-						"source.organizeImports": "explicit"
-					}
-				},
-				"isort.args": [
-					"--profile",
-					"black"
-				],
-				"files.trimFinalNewlines": true,
-				"files.trimTrailingWhitespace": true,
-				"files.watcherExclude": {
-					"**/.git/objects/**": true,
-					"**/.git/subtree-cache/**": true
-				}
+				"extensions.verifySignature": false
 			},
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"ms-python.python",
-				"magicstack.magicpython",
-				"ms-python.black-formatter",
 				"ms-python.isort",
 				"eamodio.gitlens",
-				"GitHub.copilot",
-				"GitHub.copilot-labs",
 				"charliermarsh.ruff",
+				"ms-toolsai.jupyter",
+				"GitHub.vscode-pull-request-github",
+				"tamasfe.even-better-toml",
+				"christian-kohler.path-intellisense",
+				"github.vscode-github-actions",
+				"seatonjiang.gitmoji-vscode"
 			]
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "bash /home/vscode/entrypoint.sh",
+	"postCreateCommand": "bash /home/vscode/entrypoint.sh"
 }

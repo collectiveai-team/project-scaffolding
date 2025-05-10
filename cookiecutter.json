@@ -1,36 +1,9 @@
 {
     "project_name": "project name (with spaces)",
-    "repo_name": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
+    "repo_name": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
     "git_repo_url": "git repo url to clone it",
     "package_name": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
-    "author_name": "author",
-    "author_user": "{{ cookiecutter.author_name }}",
-    "author_email": "info@collecitveai.io",
     "description": "A short description of the project.",
-    "use_cuda": ["yes", "no"],
-    "python_version": [
-        "3.9",
-        "3.10",
-        "3.11",
-        "3.12",
-        "3.13"
-    ],
-    "pytorch_version": [
-        "no",
-        "1.11.0",
-        "1.12.1",
-        "1.13.0"
-    ],
-    "_cuda_image_version_map": {
-        "cu113": "nvcr.io/nvidia/cuda:11.3.1-cudnn8-runtime-ubuntu20.04",
-        "cu117": "nvcr.io/nvidia/cuda:11.7.1-runtime-ubuntu22.04"
-    },
-    "_pythorch_cuda_version_map": {
-        "1.11.0": "cu113",
-        "1.12.1": "cu113",
-        "1.13.0": "cu117"
-    },
-    "base_image": "{{ cookiecutter._cuda_image_version_map.get(cookiecutter._pythorch_cuda_version_map.get(cookiecutter.pytorch_version), 'nvcr.io/nvidia/cuda:11.7.1-runtime-ubuntu22.04') }}",
     "open_source_license": [
         "No License file",
         "MIT",

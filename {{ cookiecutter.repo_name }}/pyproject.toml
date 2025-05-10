@@ -1,44 +1,124 @@
+[build-system]
+# requires = ["setuptools>=64", "setuptools_scm>=8"]
+# build-backend = "setuptools.build_meta"
+requires = ['hatchling', 'hatch-fancy-pypi-readme>=22.5.0', "hatch-vcs"]
+build-backend = 'hatchling.build'
+
+#######################################################################################
+# Project metadata
+#######################################################################################
+[project]
+name = "{{ cookiecutter.package_name }}"
+requires-python = "==3.12.*"
+# version = "1.1.0"
+dynamic = ["version"]
+# dynamic = ["version", "dependencies"]
+authors = [{ name = "collective.ai", email = "info@collectiveai.io" }]
+maintainers = [{ name = "collective.ai", email = "info@collectiveai.io" }]
+description = "{{ cookiecutter.description }}"
+classifiers = [
+    # How mature is this project? Common values are
+    #   3 - Alpha
+    #   4 - Beta
+    #   5 - Production/Stable
+    'Development Status :: 4 - Beta',
+    # 'Development Status :: 5 - Production/Stable',
+
+    # Indicate who your project is intended for
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+
+    # Pick your license as you wish (see also "license" above)
+    "License :: OSI Approved :: MIT License",
+
+    # Specify the Python versions you support here.
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+
+keywords = []
+
+#######################################################################################
+# Dependencies
+#######################################################################################
+dependencies = [
+    "pydantic==2.10.6",
+    "pydantic-settings>=2.8.1",
+    "python-dotenv>=1.0.1",
+    "rich>=14.0.0",
+]
+
+
+#######################################################################################
+# Optional dependencies
+#######################################################################################
+[dependency-groups]
+dev = [
+    "hatch>=1.14.0",
+    "ipykernel>=6.29.5",
+    "matplotlib>=3.10.0",
+    "seaborn>=0.13.2",
+    "plotly>=6.0.0",
+    "jupyter>=1.1.1",
+    "diskcache>=5.6.3",
+    "typer>=0.15.1",
+    "ipywidgets>=8.1.5",
+    "nbformat>=5.10.4",
+    "pytest>=8.2.2",
+    "python-dotenv>=1.0.1",
+]
+api = []
+
+#######################################################################################
+# Project extra configuration
+#######################################################################################
+
+# Package
+# =======
+[tool.setuptools.packages.find]
+include = ["{{ cookiecutter.package_name }}"]
+
+# Scripts
+# =======
+[project.scripts]
+
+# Package data
+# ============
+[tool.setuptools.package-data]
+"*" = ["*.yml", "*.yaml", "*.csv"]
+
+#######################################################################################
+# Hatch configuration
+#######################################################################################
+[tool.hatch]
+version.source = "vcs"
+build.hooks.vcs.version-file = "{{ cookiecutter.package_name }}/core/version.py"
+
+
+[tool.hatch.version.raw-options]
+version_scheme = "only-version"
+local_scheme = "no-local-version"
+
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+
+#######################################################################################
+# Pylint configuration
+#######################################################################################
 [tool.pylint.messages_control]
 disable = "C0330, C0326"
 
+
+#######################################################################################
+# Isort configuration
+#######################################################################################
 [tool.isort]
 profile = "black"
 length_sort = true
 combine_as_imports = true
 force_sort_within_sections = true
-
-[tool.poetry]
-name = "{{ cookiecutter.package_name }}"
-version = "0.0.1"
-packages = [
-    { include = "{{ cookiecutter.package_name }}" }
-]
-description = "This is the base package for {{ cookiecutter.package_name }}"
-authors = ["collectiveai <info@collectiveai.io>"]
-
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-
-[tool.poetry.dependencies]
-python = "^{{ cookiecutter.python_version}}"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.2.2"
-# awscli = "^1.33.0"
-python-dotenv = "^1.0.1"
-diskcache = "^5.6.3"
-radon = "==5.1.0"
-black = "^24.8.0"
-
-[tool.pytest.ini_options]
-# addopts="-n4"
-testpaths = ["test"]
-filterwarnings = [
-    "error",
-    "ignore::UserWarning",
-    # note the use of single quote below to denote "raw" strings in TOML
-    'ignore:.*:DeprecationWarning',
-]
+lexicographical = true
+group_by_package = true
